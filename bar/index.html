@@ -1,14 +1,16 @@
 <html>
 <head>
     <title>Bar chart</title>
-    <script type="text/javascript" src="styles.js"></script>
     <link rel="stylesheet" type="text/css" href="../shared/page-styles.css">
 </head>
 <body>
-    <div class="chart-container" data-mediatype="print"></div>
-    <div class="chart-container" data-mediatype="web"></div>
-    <div class="chart-container" data-mediatype="video"></div>
-    <div class="chart-container" data-mediatype="social"></div>
+    <div class="chart-container" 
+        data-mediatype="print"
+        data-chartstyle="/shared/print-style.css"></div>
+    <div class="chart-container" 
+        data-mediatype="web"
+        data-chartstyle="/shared/web-style.css"></div>
+    
 
 
 
@@ -16,6 +18,7 @@
     <script src="http://ft-interactive.github.io/visual-vocabulary/shared/svg2png.js"></script>
     <script src="../shared/ft-chartframe.js"></script>
     <script src="bar.js"></script>
+
     <script>
         
         //datafile
@@ -37,14 +40,32 @@
         var numTicksx=5;//rough number of ticks for x axis
         var ticks//=[0.2,0.3];//option to force tick values for online
 
+        d3.selectAll(".chart-container")
+            .each(function(){
+                var dataset = this.dataset;
+                var container = d3.select(this);
+                console.log(dataset)
+                var frame = drawFrame()
+                    .styleSheet(dataset.chartstyle);
+                    // .width( framewidth )
+                    // .height( frameheight )
+                    // .margin( framemargin )
+                    // .title( title )
+                    // .source( source );
+
+                container.call(frame);
+
+            })
+
+
         //Use the frames array to set unique values for each media type of frame
         // Print column sizes-- 1col 53.71mm: 2col 112.25mm: 3col 170.8mm: 4col 229.34mm: 5col 287.88mm: 6col 346.43
-        var frames=[
-        {name:"print",width:53.71,height:68,units:'mm',margins:[{top:5,right:5,bottom:5, left:3}],stylesheet:styleprint,legend:"hori"},
-        {name:"web",width:600,height:400,units:'px',margins:[{top:10,right:35,bottom:5,left:10}],stylesheet:styleweb,legend:"hori"},
-        {name:"social",width:560,height:750,units:'px',margins:[{top:36,right:50, bottom:25, left:50}],stylesheet:stylesoc,legend:"vert"},
+        // var frames=[
+        // {name:"print",width:53.71,height:68,units:'mm',margins:[{top:5,right:5,bottom:5, left:3}],stylesheet:styleprint,legend:"hori"},
+        // {name:"web",width:600,height:400,units:'px',margins:[{top:10,right:35,bottom:5,left:10}],stylesheet:styleweb,legend:"hori"},
+        // {name:"social",width:560,height:750,units:'px',margins:[{top:36,right:50, bottom:25, left:50}],stylesheet:stylesoc,legend:"vert"},
         //{name:"video",width:1920,height:1080,units:'px',margins:[{top:80,right:207,bottom:50,left:207}],stylesheet:stylevid,legend:"hori",yLabel:"right"}
-        ]
+        //]
         
         //sets the padding inside the chart area
 
@@ -69,43 +90,44 @@
             }
         })//end data load
 
-        function drawFrames(){
-            function mmToPx(mm){
-                var px = mm * 2.83464480558843;
-                return px;
-            }
+        // function drawFrames(){
+        //     function mmToPx(mm){
+        //         var px = mm * 2.83464480558843;
+        //         return px;
+        //     }
 
-            for (var i=0;i<frames.length;i++){
-                var stylename=frames[i].stylesheet;
-                var media = frames[i].name;
-                if(frames[i].units=="mm") {
-                    framewidth = mmToPx(frames[i].width);
-                    frameheight = mmToPx(frames[i].height);
-                } else {
-                    framewidth = frames[i].width;
-                    frameheight = frames[i].height;
-                }
-                var framemargin = frames[i].margins[0];
-                var titleYoffset=stylename.titleOffset;
-                var subYoffset=stylename.subOffset
-                var frame = new drawFrame()
-                    .styleSheet('/shared/web-style.css')
-                    .width(framewidth)
-                    .height(frameheight)
-                    .margin(framemargin)
-                    .title(title)
-                    .source(source)
+        //     for (var i=0;i<frames.length;i++){
+        //         var stylename=frames[i].stylesheet;
+        //         var media = frames[i].name;
+        //         if(frames[i].units=="mm") {
+        //             framewidth = mmToPx(frames[i].width);
+        //             frameheight = mmToPx(frames[i].height);
+        //         } else {
+        //             framewidth = frames[i].width;
+        //             frameheight = frames[i].height;
+        //         }
+        //         var framemargin = frames[i].margins[0];
+        //         var titleYoffset=stylename.titleOffset;
+        //         var subYoffset=stylename.subOffset
+        //         var frame = new drawFrame()
+        //             .styleSheet('/shared/web-style.css')
+        //             .width(framewidth)
+        //             .height(frameheight)
+        //             .margin(framemargin)
+        //             .title(title)
+        //             .source(source)
 
-                //optional elements
-                if (subtitle){
-                    frame.subtitle(subtitle)
-                }
-                d3.select("body").call(frame)
-            }
-        }
+        //         //optional elements
+        //         if (subtitle){
+        //             frame.subtitle(subtitle)
+        //         }
+        //         d3.select("body").call(frame)
+        //     }
+        // }
 
 
             
     </script>
 </body>
+    <script src="../shared/scoped.js"></script>
 </html>

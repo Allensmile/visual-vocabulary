@@ -15,15 +15,17 @@ function drawFrame() {
         plotDimension = { width:undefined, height:undefined, x:undefined, y:undefined };
 
     function frame(p) {
-        
+
         var chart = p.append('svg')
             .attr('class','chart')
+            .attr('xmlns','http://www.w3.org/2000/svg')
             .attr('width', width)
             .attr('height', height)
             .attr('viewBox', '0 0 ' + width + ' ' + height)
 
-        chart.append('defs')
-        	.append('style')
+        p.append('style')
+            .attr('type','text/css')
+            .attr('scoped','true')
         	.call(loadStyle, styleSheet);
         
         chart.append('rect')
@@ -60,7 +62,7 @@ function drawFrame() {
 	            .attr('class','hat')
 	            .attr('d','M 0.5,'+(height-0.5)+' L'+(width-0.5)+','+(height-0.5));
         }
-        
+
         var headerBBox = chart.select('.header').node().getBBox()
 
         var contentOffsetTop = headerBBox.y + headerBBox.height;
@@ -83,7 +85,6 @@ function drawFrame() {
 	            .text(function(d){
 	                return d;
 	            });
-
         //now we can layout the text in right place
         footer.attr('y', function(){
             return height - (d3.select(this).node().getBBox().height + margin.bottom)
@@ -116,13 +117,11 @@ function drawFrame() {
 
         var plotX = margin.left; 
         var plotY = contentOffsetTop;
-
         var plot = chart.append('g')
             .attr('class', 'plot')
             .attr('transform','translate('+margin.left+','+contentOffsetTop+')');
 
         var plotDimension = {x:plotX, y:plotY, width:0 , height:0, };
-        
     }
 
     frame.styleSheet = function(cssFile){
